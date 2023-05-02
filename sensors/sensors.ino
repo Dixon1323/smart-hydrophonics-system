@@ -2,15 +2,19 @@
 #include "GravityTDS.h"
 #include <OneWire.h> 
 #include <DallasTemperature.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
 #define ONE_WIRE_BUS 7
 #define TdsSensorPin A1
 OneWire oneWire(ONE_WIRE_BUS); 
 GravityTDS gravityTds;
 DallasTemperature sensors(&oneWire);
+Adafruit_SSD1306 myDisplay(128, 64, &Wire);
 float tdsValue = 0;
 
 float calibration_value = 21.34;
-int phval = 0; 
+int phval = 0,a; 
 unsigned long int avgval; 
 int buffer_arr[10],temp;
 
@@ -23,6 +27,14 @@ void setup()
     gravityTds.setAref(5.0);  //reference voltage on ADC, default 5.0V on Arduino UNO
     gravityTds.setAdcRange(1024);  //1024 for 10bit ADC;4096 for 12bit ADC
     gravityTds.begin();  //initialization
+    myDisplay.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+    myDisplay.clearDisplay();
+    myDisplay.setTextSize(2);
+    myDisplay.setCursor(0,0);
+    myDisplay.setTextColor(WHITE);
+    myDisplay.println("Hydrophonics System");
+    myDisplay.display();
+    //delay(2000);
 }
  
 void loop()
@@ -57,10 +69,25 @@ void loop()
     sensors.requestTemperatures();
     gravityTds.setTemperature(sensors.getTempCByIndex(0));  // set the temperature and execute temperature compensation
     gravityTds.update();  //sample and calculate
+    a=sensors.getTempCByIndex(0);
     tdsValue = gravityTds.getTdsValue();  // then get the value
     Serial.print(tdsValue,0);
     Serial.println("ppm");
     Serial.print("Temperature is: "); 
-    Serial.println(sensors.getTempCByIndex(0));
+    Serial.println(a);
+    myDisplay.clearDisplay();
+    myDisplay.setTextSize(2);
+    myDisplay.setCursor(0,0);
+    myDisplay.setTextColor(WHITE);
+    myDisplay.print("Ph  :");
+    myDisplay.println(ph_act);
+    myDisplay.setCursor(0,25);
+    myDisplay.print("TDS :");
+    myDisplay.println("110");
+    myDisplay.setCursor(0,46);
+    myDisplay.print("Temp:");
+    myDisplay.println("32");
+    myDisplay.display();
+
 delay(500);
 }
