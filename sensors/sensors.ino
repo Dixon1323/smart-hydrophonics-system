@@ -14,11 +14,11 @@ GravityTDS gravityTds;
 DallasTemperature sensors(&oneWire);
 //Adafruit_SSD1306 myDisplay(128, 64, &Wire);
 float tdsValue = 0;
-
-float calibration_value = 22.44;
-int phval = 0,a; 
+bool state=false;
+float calibration_value = 22.44,ph_act;
+int phval = 0,a,wt=0,count; 
 unsigned long int avgval; 
-int buffer_arr[10],temp;
+int buffer_arr[10],temp,less,more;
 
 
 void setup()
@@ -28,29 +28,34 @@ void setup()
     pinMode(3,OUTPUT);
     pinMode(5,OUTPUT);
     pinMode(6,OUTPUT);
+    pinMode(9,OUTPUT);
     digitalWrite(4,HIGH);
     digitalWrite(3,HIGH);
-    digitalWrite(5,HIGH);
-    digitalWrite(6,HIGH);
+    digitalWrite(5,LOW);
+    digitalWrite(6,LOW);
+    analogWrite(9,0);
     sensors.begin();
     gravityTds.setPin(TdsSensorPin);
-    gravityTds.setAref(5.0);  //reference voltage on ADC, default 5.0V on Arduino UNO
-    gravityTds.setAdcRange(1024);  //1024 for 10bit ADC;4096 for 12bit ADC
-    gravityTds.begin();  //initialization
+    gravityTds.setAref(5.0);
+    gravityTds.setAdcRange(1024);
+    gravityTds.begin();
    // myDisplay.begin(SSD1306_SWITCHCAPVCC, 0x3C);
     myDisplay.begin(SH1106_SWITCHCAPVCC, 0x3C);
     myDisplay.clearDisplay();
     myDisplay.setTextSize(2);
     myDisplay.setCursor(0,0);
     myDisplay.setTextColor(WHITE);
-    myDisplay.println("Hydrophonics System");
+    myDisplay.println("   Hydro    phonics   System");
     myDisplay.display();
     //delay(2000);
 }
  
 void loop()
 {
-     
+  count++;
+//Serial.println(count); 
+ // analogWrite(9,80);
+
  for(int i=0;i<10;i++) 
  { 
  buffer_arr[i]=analogRead(A0);
@@ -72,11 +77,11 @@ void loop()
  for(int i=2;i<8;i++)
  avgval+=buffer_arr[i];
  float volt=(float)avgval*5.0/1024/6;
- float ph_act = -5.70 * volt + calibration_value;
+ ph_act =((-5.70 * volt + calibration_value));
+ //ph_act =((-5.70 * volt + calibration_value)+11);
  //Serial.print("pH Val:");
  //Serial.println(ph_act);
  delay(500);
-
     digitalWrite(4,LOW);
     digitalWrite(3,LOW);
     sensors.requestTemperatures();
@@ -85,6 +90,7 @@ void loop()
     a=sensors.getTempCByIndex(0);
     tdsValue = gravityTds.getTdsValue();  // then get the value
     //Serial.print(tdsValue,0);
+    //Serial.println(less);
     //Serial.println("ppm");
     delay(200);
     digitalWrite(3,HIGH);
@@ -105,18 +111,43 @@ void loop()
     myDisplay.println(a);
     myDisplay.display();
     sendCombinedData(ph_act, tdsValue, a);
-    if(ph_act<5)
+    wt++;
+    if(ph_act<6)
     {
-      digitalwrite(5,LOW);
-      delay(300);
-      digitalWrite(5,HIGH)
+     less++;
     }
 
-    if(ph_act>8)
+    if(ph_act>7)
     {
-      digitalwrite(5,LOW);
-      delay(300);
-      digitalWrite(5,HIGH)
+      more++;
+    }
+
+    if(less>=15&&wt>25)
+    {
+      digitalWrite(6,LOW);
+      digitalWrite(5,HIGH);
+      delay(500);
+      digitalWrite(6,LOW);
+      digitalWrite(5,LOW);
+      less=0;
+      wt=0;
+    }
+
+    if(more>=15&&wt>25)
+    {
+      digitalWrite(5,LOW);
+      digitalWrite(6,HIGH);
+      delay(500);
+      digitalWrite(6,LOW);
+      digitalWrite(5,LOW);
+      more=0;
+      wt=0;
+    }
+
+    if(ph_act>6&&ph_act<7)
+    {
+      less=0;
+      more=0;
     }
 
 
@@ -126,6 +157,9 @@ void loop()
 
 void sendCombinedData(float value1, float value2, int value3)
  {
-  String combinedData = String(value1) + "," + String(value2) + "," + String(value3);
+ //String combinedData = String(value1) + "," + String(value2) + "," + String(value3);
+ String combinedData = "," + String(value2) + "," + String(value3);
+  Serial.print(value1);
   Serial.println(combinedData);
+  
 }

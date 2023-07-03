@@ -72,13 +72,13 @@ void parseData(String receivedData) {
   Blynk.virtualWrite(V1, ph);
   Blynk.virtualWrite(V2, tds);
   Blynk.run();
-  if(ph<6.5)
+  if(ph<4)
   {
     bot.sendMessage(CHAT_ID, "Low Ph Value detected", "");
   }
   
   if(tds>300)
   {
-    bot.sendMessage(CHAT_ID, "High TDS Value detected!!Change", "");
+    bot.sendMessage(CHAT_ID, "High TDS Value detected!!Change water", "");
   }
 } 
