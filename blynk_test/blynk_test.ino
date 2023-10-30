@@ -2,15 +2,15 @@
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
-#define BLYNK_TEMPLATE_ID "TMPL3Tm7K0WgV"
-#define BLYNK_TEMPLATE_NAME "hydrophonics"
-#define BLYNK_AUTH_TOKEN "aHjqZTiIaxA_Y0iY6ZhJmMMat7qH2l9d"
+#define BLYNK_TEMPLATE_ID "Your Blynk template ID"
+#define BLYNK_TEMPLATE_NAME "Your Blynk template namw"
+#define BLYNK_AUTH_TOKEN "Your Blynk auth token"
 #define BLYNK_PRINT Serial
 
 SoftwareSerial swSerial(D3, D4);
 
-char ssid[] = "Chathamkottu";
-char pass[] = "12345678";
+char ssid[] = "Your SSID";
+char pass[] = "Your Password";
 
 void setup()
 {

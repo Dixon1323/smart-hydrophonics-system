@@ -5,16 +5,16 @@
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
-#define BOTtoken "6110455886:AAGWHbrnggxJ7RYG5MYI232aNr8WjkFzdrc"
-#define CHAT_ID "687558002"
-#define BLYNK_TEMPLATE_ID "TMPL3Tm7K0WgV"
-#define BLYNK_TEMPLATE_NAME "hydrophonics"
-#define BLYNK_AUTH_TOKEN "aHjqZTiIaxA_Y0iY6ZhJmMMat7qH2l9d"
+#define BOTtoken "your bot Token"
+#define CHAT_ID "Your chat ID"
+#define BLYNK_TEMPLATE_ID "Your Blynk Template ID"
+#define BLYNK_TEMPLATE_NAME "Your Blynk template Namw"
+#define BLYNK_AUTH_TOKEN "Your Blynk Auth token "
 #define BLYNK_PRINT Serial
 
 SoftwareSerial swSerial(D3, D4);
-const char* ssid = "Chathamkottu";// Enter your WIFI SSID
-const char* pass = "12345678"; // Enter your WIFI Password
+const char* ssid = "Your SSID";// Enter your WIFI SSID
+const char* pass = "Your Password"; // Enter your WIFI Password
 
 X509List cert(TELEGRAM_CERTIFICATE_ROOT);
 WiFiClientSecure client;
@@ -72,12 +72,17 @@ void parseData(String receivedData) {
   Blynk.virtualWrite(V1, ph);
   Blynk.virtualWrite(V2, tds);
   Blynk.run();
-  if(ph<4)
+  if(ph<4) //minimum ph value for sending message
   {
     bot.sendMessage(CHAT_ID, "Low Ph Value detected", "");
   }
+  if(ph<8) //maximum ph value for sending message
+  {
+    bot.sendMessage(CHAT_ID, "High Ph Value detected", "");
+  }
+
   
-  if(tds>300)
+  if(tds>300) //maximum tds value for sending message
   {
     bot.sendMessage(CHAT_ID, "High TDS Value detected!!Change water", "");
   }
