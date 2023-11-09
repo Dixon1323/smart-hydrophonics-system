@@ -62,7 +62,7 @@ Working WiFi
 
 To get started with the Smart Hydroponics System, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-username/your-repo.git`
+1. Clone the repository: `git clone https://github.com/Dixon1323/smart-hydrophonics-system.git`
 2. Install the required dependencies.
 3. Configure the Telegram bot token and other settings.
 4. Run the main script to start the system.
