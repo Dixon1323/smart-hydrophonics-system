@@ -34,7 +34,7 @@
 
 ## About The Project
 
-![Screen Shot](images/screenshot-min.png)
+![Screen Shot]([images/screenshot-min.png])
 
 ## Features
 
