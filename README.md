@@ -34,7 +34,7 @@
 
 ## About The Project
 
-![Screen Shot](images/screenshot-min.png)
+![Screen Shot]([images/screenshot-min.png](https://media.licdn.com/dms/image/D5622AQEOgYlrLU1esQ/feedshare-shrink_1280/0/1698692781194?e=1702512000&v=beta&t=rylaR-eHYY3Yn7LjeFcXvuCwFG05HEjwaIp2wfH326o))
 
 ## Features
 
